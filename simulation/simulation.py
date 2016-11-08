@@ -19,7 +19,7 @@ theta = misc.generate_theta(parameters["scan_options"]["start_angle"], parameter
 sinogram = misc.create_sinogram(image, theta)
 
 image_rebuild, t = misc.perform_algo(sinogram, theta, algorithm)
-rmse = compare_nrmse(image, image_rebuild)
+rmse = compare_nrmse(image, image_rebuild, "mean")
 
 print("Image rebuild in {}s with an RMSE of : {}\n".format(t, rmse))
 

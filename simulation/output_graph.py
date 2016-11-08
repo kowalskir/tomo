@@ -2,10 +2,10 @@
 import matplotlib.pyplot as plt
 import csv
 
-csvfile = open("output.csv", "r", newline="")
+csvfile = open("output2.csv", "r", newline="")
 reader = csv.reader(csvfile, "excel", delimiter=",")
 
-algo_list = ["scikit_par_fbp", "scikit_par_sart"]
+algo_list = ["scikit_fbp", "scikit_sart"]
 
 p = {}
 t = {}

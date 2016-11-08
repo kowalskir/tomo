@@ -6,31 +6,37 @@ import csv
 
 import algorithmes
 import data
+import misc
 
 import matplotlib.pyplot as plt
 from skimage.measure import compare_nrmse
 
 image = data.open_image(sys.argv[1])
 
-algos = ["scikit_par_fbp", "scikit_par_sart"]
-projections = np.arange(5, 181, 5)
+algos = ["scikit_fbp", "scikit_sart"]
+projections = np.arange(5, 181, 5) #Liste de nombres entre 5 et 181 (exclus) avec des écarts de 5
 
 t = {}
 e = {}
 
+parameters = data.read_config("parameters.conf")
+
 for algo in algos:
-	algo_config = data.read_config("algorithmes.conf")
-	if not algo in algo_config:
-		raise Exception("Algorithm {} not in config file".format(algo))
-		exit()
-	parameters = data.read_config("parameters.conf")
+	#~ algo_config = data.read_config("algorithmes.conf")
+	#~ if not algo in algo_config:
+		#~ raise Exception("Algorithm {} not in config file".format(algo))
+		#~ exit()
+	
 	
 	t[algo] = []
 	e[algo] = []
 	
 	for i in projections:
-		parameters["parallel_geometry"]["nb_angles"] = str(i)
-		rebuild_image, process_time = getattr(algorithmes, algo)(image, algo_config[algo], parameters)
+		#~ parameters["parallel_geometry"]["nb_angles"] = str(i)
+		theta = np.linspace(0., 180., float(i), endpoint=False)
+		sinogram = misc.create_sinogram(image, theta)
+		
+		rebuild_image, process_time = getattr(algorithmes, algo)(sinogram, theta)
 		rmse = compare_nrmse(image, rebuild_image, "mean")
 		t[algo].append(process_time)
 		e[algo].append(rmse)
