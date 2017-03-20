@@ -1,7 +1,7 @@
 import numpy as np
 import skimage.transform as tr
 import skimage.transform as tr
-from skimage.io import imsave
+from scipy.misc import imsave
 
 import time
 import math
@@ -32,7 +32,7 @@ class Tomo :
         self.sino = []
         self.value_min = -1
         self.value_max = -1
-        self.log_value_max = -1
+        self.log_value_max = math.log(1023)
         self.nb_angles = 0
         self.nb_steps = 0
         self.angle_max = 0
@@ -156,7 +156,7 @@ class Tomo :
                     nb_vmax += 1
         self.value_min = vmin / nb_vmin
         self.value_max = vmax / nb_vmax
-        self.log_value_max = math.log(self.value_max)
+        #self.log_value_max = math.log(self.value_max)
         self.calibrated = True
         calib_win.end(self.value_max, self.value_min)
     
@@ -197,6 +197,6 @@ class Tomo :
     
     def save(self, data) :
         try:
-            imsave(ScanWin.save_path(), np.uint16(data), plugin="freeimage") #DOES NOT WORK !!!!!
+            imsave(ScanWin.save_path(), data)
         except Exception as e:
             print(e)
